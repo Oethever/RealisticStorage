@@ -43,8 +43,8 @@ public class RealisticStorage {
     public static RealisticStorage INSTANCE;
 
     private static Logger log;
-    private ArrayList<Pattern> alwaysEjectedPatterns = new ArrayList<>();
-    private ArrayList<Pattern> neverEjectedPatterns = new ArrayList<>();
+    private final ArrayList<Pattern> alwaysEjectedPatterns = new ArrayList<>();
+    private final ArrayList<Pattern> neverEjectedPatterns = new ArrayList<>();
 
     @Mod.EventHandler
     public void preinit(FMLPreInitializationEvent event) {
@@ -97,7 +97,6 @@ public class RealisticStorage {
                 patterns.add(Pattern.compile(pattern));
             } catch (PatternSyntaxException e) {
                 log.warn("Invalid pattern: " + pattern);
-                continue;
             }
         }
     }
