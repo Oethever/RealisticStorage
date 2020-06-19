@@ -140,7 +140,15 @@ public class ModConfig {
             "immersiveengineering:connector:9",
             "immersiveengineering:connector:12",
             "immersiveengineering:connector:13",
-            "immersiveengineering:metal_device1:4"
+            "immersiveengineering:metal_device1:4",
+
+            // Realistic torches
+            ".*:torch.*",
+
+            // Inspirations
+            "inspirations:path",
+            "inspirations:rope",
+            "inspirations:pipe"
     };
 
     @Config.LangKey("realisticstorage.config.message.send")
