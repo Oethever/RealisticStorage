@@ -99,6 +99,7 @@ public class ModConfig {
             "betterwithmods:bamboo_chime",
             "betterwithmods:candle",
             "betterwithmods:candle_holder",
+            "betterwithmods:hemp",
 
             // Bibliocraft
             "bibliocraft:fancysign",
@@ -148,7 +149,19 @@ public class ModConfig {
             // Inspirations
             "inspirations:path",
             "inspirations:rope",
-            "inspirations:pipe"
+            "inspirations:pipe",
+
+            // Tinker construct / ceramics
+            "ceramics:faucet",
+            "ceramics:channel",
+            "tconstruct:faucet",
+            "tconstruct:channel",
+            "tconstruct:rack",
+            "tconstruct:stone_ladder",
+
+            // Dawn of Time: Builder Edition
+            "dawnoftimebuilder:rice",
+            "dawnoftimebuilder:camellia_seed"
     };
 
     @Config.LangKey("realisticstorage.config.message.send")
@@ -177,7 +190,7 @@ public class ModConfig {
         public static void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event) {
             if (event.getModID().equals(MODID)) {
                 ConfigManager.sync(MODID, Config.Type.INSTANCE);
-                INSTANCE.updateRegex();
+                INSTANCE.updateConfig();
             }
         }
     }
