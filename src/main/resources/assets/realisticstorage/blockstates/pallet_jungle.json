@@ -1,7 +1,8 @@
 {
   "variants": {
-    "normal": [
-      { "model": "realisticstorage:pallet_jungle" }
-    ]
+    "facing=north": { "model": "realisticstorage:pallet_jungle" },
+    "facing=east": { "model": "realisticstorage:pallet_jungle", "y": 90 },
+    "facing=south": { "model": "realisticstorage:pallet_jungle", "y": 180 },
+    "facing=west": { "model": "realisticstorage:pallet_jungle", "y": 270 }
   }
 }

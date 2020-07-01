@@ -165,9 +165,7 @@ public class ModConfig {
     };
 
     @Config.LangKey("realisticstorage.config.message.send")
-    @Config.Comment({"If players should be notified about issues.",
-            "True = Send the player a message. False = No message."
-    })
+    @Config.Comment("True if players should be notified about issues.")
     public static Boolean messageSend = true;
 
     @Config.LangKey("realisticstorage.config.message.text")
@@ -179,6 +177,11 @@ public class ModConfig {
             "True = Action bar message. False = Chat Message."
     })
     public static Boolean messageLocation = true;
+
+    @Config.LangKey("realisticstorage.config.addpallet")
+    @Config.Comment("True if the Pallet block should be added to the game.")
+    @Config.RequiresMcRestart
+    public static Boolean addPallet = true;
 
     @Config.LangKey("realisticstorage.config.debug")
     @Config.Comment("Enable/Disable the debug logging of slots and container names.")
