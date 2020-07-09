@@ -14,7 +14,7 @@ apply plugin: 'net.minecraftforge.gradle'
 //apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = '1.2'
+version = '1.2.1'
 group = 'oethever'
 archivesBaseName = 'realisticstorage'
 
