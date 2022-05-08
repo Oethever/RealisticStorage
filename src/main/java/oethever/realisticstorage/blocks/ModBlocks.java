@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@Mod.EventBusSubscriber(modid= RealisticStorage.MODID)
+@Mod.EventBusSubscriber(modid=RealisticStorage.MODID)
 public class ModBlocks {
 
     private static final List<String> woodTypes = Arrays.asList("oak", "spruce", "dark_oak", "acacia", "birch", "jungle");

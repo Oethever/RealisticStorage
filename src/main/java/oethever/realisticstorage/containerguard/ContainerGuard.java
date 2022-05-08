@@ -1,6 +1,5 @@
 package oethever.realisticstorage.containerguard;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -10,8 +9,6 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
@@ -29,10 +26,9 @@ import java.util.regex.PatternSyntaxException;
 public class ContainerGuard {
     private final ArrayList<Pattern> alwaysEjectedPatterns = new ArrayList<>();
     private final ArrayList<Pattern> neverEjectedPatterns = new ArrayList<>();
-    private final Logger logger;
+    private Logger logger;
 
-    public ContainerGuard(Logger logger) {
-        this.logger = logger;
+    public ContainerGuard() {
         MinecraftForge.EVENT_BUS.register(this);
         updateConfig();
     }
@@ -53,7 +49,7 @@ public class ContainerGuard {
             // ray-trace to get the block the user is looking at.
             BlockPos tracedPos = Utils.getTargetedBlock(player);
             // Check the size.
-            doSizeCheck(player, world, tracedPos, slotsToCheck);
+            checkSize(player, world, tracedPos, slotsToCheck);
         }
     }
 
@@ -73,12 +69,7 @@ public class ContainerGuard {
         }
     }
 
-    private void doSizeCheck(EntityPlayer player, World world, BlockPos tracedPos, ArrayList<Slot> slotsToEffect) {
-        // Do the check of size
-        checkSize(world, tracedPos, slotsToEffect, player);
-    }
-
-    private void checkSize(World world, BlockPos tracedPos, ArrayList<Slot> slotsToCheck, EntityPlayer player) {
+    private void checkSize(EntityPlayer player, World world, BlockPos tracedPos, ArrayList<Slot> slotsToCheck) {
         // Loop over each slot that needs to be acted on.
         for (Slot slot : slotsToCheck) {
             // make sure our slot has a stack
@@ -112,20 +103,17 @@ public class ContainerGuard {
 
     private ArrayList<Slot> getSlots(Container container, ArrayList<String> slotClassNameList, String containerName) {
         ArrayList<Slot> slotsToCheck = new ArrayList<>();
-        // Remove this entry if people put it in cause a shit ton of stuff uses this and warn them.
+
         if (slotClassNameList.remove("net.minecraft.inventory.InventoryBasic")) {
             logger.warn("Ignoring basic slot! Don't put \"net.minecraft.inventory.InventoryBasic\" in your config, like the config says! this is not a bug!");
         }
 
-        // simple debug to get the container class name.
         if (ModConfig.debugLog) {
             logger.info("Container name: " + containerName);
         }
 
         // Check over every slot inside the inventory to get the slots we want to mess with.
         for (Slot slot : container.inventorySlots) {
-
-            // simple debug to get the slot class names.
             if (ModConfig.debugLog) {
                 logger.info("Slot class name:" + slot.inventory.getClass().toString());
             }
@@ -161,5 +149,9 @@ public class ContainerGuard {
         entityitem.motionZ = world.rand.nextGaussian() * 0.07D;
         // Spawn the entity with the constructed Entityitem.
         world.spawnEntity(entityitem);
+    }
+
+    public void setLogger(Logger logger) {
+        this.logger = logger;
     }
 }
