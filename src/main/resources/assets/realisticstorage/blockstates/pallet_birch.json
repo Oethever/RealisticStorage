@@ -1,8 +1,0 @@
-{
-  "variants": {
-    "facing=north": { "model": "realisticstorage:pallet_birch" },
-    "facing=east": { "model": "realisticstorage:pallet_birch", "y": 90 },
-    "facing=south": { "model": "realisticstorage:pallet_birch", "y": 180 },
-    "facing=west": { "model": "realisticstorage:pallet_birch", "y": 270 }
-  }
-}

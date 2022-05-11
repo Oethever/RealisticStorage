@@ -1,8 +1,0 @@
-{
-  "variants": {
-    "facing=north": { "model": "realisticstorage:pallet_acacia" },
-    "facing=east": { "model": "realisticstorage:pallet_acacia", "y": 90 },
-    "facing=south": { "model": "realisticstorage:pallet_acacia", "y": 180 },
-    "facing=west": { "model": "realisticstorage:pallet_acacia", "y": 270 }
-  }
-}

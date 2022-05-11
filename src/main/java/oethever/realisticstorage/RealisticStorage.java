@@ -1,34 +1,36 @@
 package oethever.realisticstorage;
 
+import net.minecraft.world.level.block.Block;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import oethever.realisticstorage.containerguard.ContainerGuard;
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-@Mod(
-        modid = RealisticStorage.MODID,
-        name = RealisticStorage.NAME,
-        version = RealisticStorage.VERSION
-)
-public class RealisticStorage {
-    public static final String MODID = "realisticstorage";
-    public static final String NAME = "Realistic Storage";
-    public static final String VERSION = "1.2.1";
+// The value here should match an entry in the META-INF/mods.toml file
+@Mod("realisticstorage")
+public class RealisticStorage
+{
+    // Directly reference a log4j logger.
+    private static final Logger LOGGER = LogManager.getLogger();
+    ContainerGuard containerGuard = new ContainerGuard(LOGGER);
 
-    @Mod.Instance(MODID)
-    public static RealisticStorage INSTANCE;
-
-    private static Logger logger;
-    private ContainerGuard containerGuard = new ContainerGuard();
-    private ServerEventHandler serverEventHandler = new ServerEventHandler();
-
-    @Mod.EventHandler
-    public void preinit(FMLPreInitializationEvent event) {
-        logger = event.getModLog();
-        containerGuard.setLogger(logger);
+    public RealisticStorage() {
+        // Register ourselves for server and other game events we are interested in
+        MinecraftForge.EVENT_BUS.register(containerGuard);
+        Config.init();
     }
 
-    public void updateConfig() {
-        containerGuard.updateConfig();
+    // You can use EventBusSubscriber to automatically subscribe events on the contained class (this is subscribing to the MOD
+    // Event bus for receiving Registry Events)
+    @Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD)
+    public static class RegistryEvents {
+        @SubscribeEvent
+        public static void onBlocksRegistry(final RegistryEvent.Register<Block> blockRegistryEvent) {
+            // register a new block here
+
+        }
     }
 }
