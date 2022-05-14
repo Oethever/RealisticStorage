@@ -1,0 +1,6 @@
+{
+  "parent": "realisticstorage:block/pallet",
+  "textures": {
+    "base": "minecraft:block/warped_planks"
+  }
+}
