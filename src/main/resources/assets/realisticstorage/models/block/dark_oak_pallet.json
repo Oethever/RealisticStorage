@@ -1,0 +1,6 @@
+{
+  "parent": "realisticstorage:block/pallet",
+  "textures": {
+    "base": "minecraft:block/dark_oak_planks"
+  }
+}
