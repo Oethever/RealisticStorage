@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -16,7 +17,10 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class BlockPallet extends Block {
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
-    private static final Properties PROPERTIES = Properties.of(Material.WOOD);
+    private static final Properties PROPERTIES = Properties
+            .of(Material.WOOD)
+            .strength(2.0F, 3.0F)
+            .sound(SoundType.WOOD);
     private static final VoxelShape SHAPE = Shapes.or(
             Block.box( 1,  0,  0,  4,  3, 16),
             Block.box(12,  0,  0, 15,  3, 16),
@@ -43,6 +47,7 @@ public class BlockPallet extends Block {
             Block.box( 0, 15, 12, 16, 16, 16)
     );
 
+    // Invert X and Z of every voxel to obtain the flipped shape
     private static final VoxelShape FLIPPED_SHAPE = SHAPE.toAabbs().stream().map(
         aabb -> Shapes.create(new AABB(
                 aabb.minZ, aabb.minY, aabb.minX,
@@ -64,6 +69,7 @@ public class BlockPallet extends Block {
         builder.add(FACING);
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter getter, BlockPos pos, CollisionContext context) {
         switch (state.getValue(FACING)) {
