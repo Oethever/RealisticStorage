@@ -11,12 +11,12 @@ import java.util.List;
 
 public class Config {
     public static final ForgeConfigSpec CONFIG_SPEC;
-    private static final Config CONFIG;
-    private static ForgeConfigSpec.BooleanValue SEND_MESSAGE;
-    private static ForgeConfigSpec.BooleanValue DEBUG_LOG;
-    private static ForgeConfigSpec.ConfigValue<List<? extends String>> CHECKED_CONTAINERS;
-    private static ForgeConfigSpec.ConfigValue<List<? extends String>> ALWAYS_EJECTED;
-    private static ForgeConfigSpec.ConfigValue<List<? extends String>> NEVER_EJECTED;
+    public static final Config CONFIG;
+    private final ForgeConfigSpec.BooleanValue sendMessage;
+    private final ForgeConfigSpec.BooleanValue debugLog;
+    private final ForgeConfigSpec.ConfigValue<List<? extends String>> checkedContainers;
+    private final ForgeConfigSpec.ConfigValue<List<? extends String>> alwaysEjected;
+    private final ForgeConfigSpec.ConfigValue<List<? extends String>> neverEjected;
 
     static {
         Pair<Config,ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(Config::new);
@@ -25,13 +25,13 @@ public class Config {
     }
 
     Config(ForgeConfigSpec.Builder builder) {
-        SEND_MESSAGE = builder
+        sendMessage = builder
                 .comment("True if players should be notified when blocks are ejected.")
                 .define("send_message", true);
-        DEBUG_LOG = builder
+        debugLog = builder
                 .comment("Enable/Disable the debug logging of slots and container names.")
                 .define("debug_log", false);
-        CHECKED_CONTAINERS = builder.
+        checkedContainers = builder.
                 comment("Short class names of inventories that are checked for oversize items. Turn on debug log to get these names.")
                 .defineList("checked_container", Arrays.asList(
                     "ChestBlockEntity",
@@ -42,7 +42,7 @@ public class Config {
                     "ShulkerBoxBlockEntity",
                     "DropperBlockEntity"
                 ), o -> true);
-        ALWAYS_EJECTED = builder.
+        alwaysEjected = builder.
                 comment("Items that are always ejected. F3+H to get names.")
                 .defineList("always_ejected", Arrays.asList(
                     "minecraft:armor_stand",
@@ -56,7 +56,7 @@ public class Config {
                     ".*_skull",
                     ".*_head"
                 ), o -> true);
-        NEVER_EJECTED = builder.
+        neverEjected = builder.
                 comment("Items that are never ejected. F3+H to get names.")
                 .defineList("never_ejected", Arrays.asList(
                     // Plants
@@ -139,23 +139,23 @@ public class Config {
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CONFIG_SPEC);
     }
 
-    public static boolean getSendMessage() {
-        return CONFIG.SEND_MESSAGE.get();
+    public boolean getSendMessage() {
+        return sendMessage.get();
     }
 
-    public static boolean getDebugLog() {
-        return CONFIG.DEBUG_LOG.get();
+    public boolean getDebugLog() {
+        return debugLog.get();
     }
 
-    public static List<String> getCheckedContainers() {
-        return (List<String>) CHECKED_CONTAINERS.get();
+    public List<String> getCheckedContainers() {
+        return (List<String>) checkedContainers.get();
     }
 
-    public static List<String> getAlwaysEjected() {
-        return (List<String>) ALWAYS_EJECTED.get();
+    public List<String> getAlwaysEjected() {
+        return (List<String>) alwaysEjected.get();
     }
 
-    public static List<String> getNeverEjected() {
-        return (List<String>) NEVER_EJECTED.get();
+    public List<String> getNeverEjected() {
+        return (List<String>) neverEjected.get();
     }
 }

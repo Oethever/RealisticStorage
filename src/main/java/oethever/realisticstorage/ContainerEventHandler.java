@@ -50,16 +50,16 @@ public class ContainerEventHandler {
             containerNames.add(slotContainerName);
             // make sure our slot has a stack, and avoid checking the player's inventory
             if (slot.hasItem()
-                    && Config.getCheckedContainers().contains(slotContainerName)
+                    && Config.CONFIG.getCheckedContainers().contains(slotContainerName)
                     && isBigItem(slot.getItem().getItem())) {
                 yeetSlot(player, blockPos, slot);
                 yeet = true;
             }
         }
-        if (yeet && Config.getSendMessage()) {
+        if (yeet && Config.CONFIG.getSendMessage()) {
             player.sendMessage(new TextComponent("These items are too big for this container!"), Util.NIL_UUID);
         }
-        if (Config.getDebugLog()) {
+        if (Config.CONFIG.getDebugLog()) {
             for (String containerName : containerNames) {
                 RealisticStorage.LOGGER.info("Slot container name: " + containerName);
             }
@@ -108,8 +108,8 @@ public class ContainerEventHandler {
     }
 
     public static void updateConfig() {
-        updateRegexList(alwaysEjected, Config.getAlwaysEjected());
-        updateRegexList(neverEjected, Config.getNeverEjected());
+        updateRegexList(alwaysEjected, Config.CONFIG.getAlwaysEjected());
+        updateRegexList(neverEjected, Config.CONFIG.getNeverEjected());
     }
 
     private static void updateRegexList(ArrayList<Pattern> patterns, List<String> stringPatterns) {
