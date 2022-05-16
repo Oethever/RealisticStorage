@@ -14,26 +14,27 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.entity.player.PlayerContainerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import org.apache.logging.log4j.Logger;
+import net.minecraftforge.fml.common.Mod;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-public class ContainerGuard {
-    private final ArrayList<Pattern> alwaysEjected = new ArrayList<>();
-    private final ArrayList<Pattern> neverEjected = new ArrayList<>();
-    private final Logger logger;
-
-    public ContainerGuard(Logger logger) {
-        this.logger = logger;
-    }
+@Mod.EventBusSubscriber(
+        modid = RealisticStorage.MOD_ID,
+        bus = Mod.EventBusSubscriber.Bus.FORGE,
+        value = Dist.CLIENT
+)
+public class ContainerEventHandler {
+    private static final ArrayList<Pattern> alwaysEjected = new ArrayList<>();
+    private static final ArrayList<Pattern> neverEjected = new ArrayList<>();
 
     @SubscribeEvent
-    public void onInventoryClose(PlayerContainerEvent.Close event) {
+    public static void onInventoryClose(PlayerContainerEvent.Close event) {
         // TODO update config only on config reload event
         updateConfig();
         Player player = event.getPlayer();
@@ -60,13 +61,13 @@ public class ContainerGuard {
         }
         if (Config.getDebugLog()) {
             for (String containerName : containerNames) {
-                logger.info("Slot container name: " + containerName);
+                RealisticStorage.LOGGER.info("Slot container name: " + containerName);
             }
         }
     }
 
 
-    private boolean isBigItem(Item item) {
+    private static boolean isBigItem(Item item) {
         ResourceLocation itemRegistryName = item.getRegistryName();
         if (itemRegistryName == null) {
             return false;
@@ -86,7 +87,7 @@ public class ContainerGuard {
     }
 
     @NotNull
-    private BlockPos getTargetedBlock(Entity entity) {
+    private static BlockPos getTargetedBlock(Entity entity) {
         HitResult hitResult = entity.pick(20, 0, false);
         if (hitResult.getType() == HitResult.Type.BLOCK) {
             return ((BlockHitResult)hitResult).getBlockPos();
@@ -95,7 +96,7 @@ public class ContainerGuard {
         }
     }
 
-    private void yeetSlot(Player player, BlockPos blockPos, Slot yeetslot) {
+    private static void yeetSlot(Player player, BlockPos blockPos, Slot yeetslot) {
         // Spawn the entity with the constructed Entityitem.
         ItemStack stack = yeetslot.getItem().copy();
         yeetslot.getItem().setCount(0);
@@ -106,18 +107,18 @@ public class ContainerGuard {
         itemEntity.setPickUpDelay(30);
     }
 
-    public void updateConfig() {
+    public static void updateConfig() {
         updateRegexList(alwaysEjected, Config.getAlwaysEjected());
         updateRegexList(neverEjected, Config.getNeverEjected());
     }
 
-    private void updateRegexList(ArrayList<Pattern> patterns, List<String> stringPatterns) {
+    private static void updateRegexList(ArrayList<Pattern> patterns, List<String> stringPatterns) {
         patterns.clear();
         for (String pattern : stringPatterns) {
             try {
                 patterns.add(Pattern.compile(pattern));
             } catch (PatternSyntaxException e) {
-                logger.warn("Invalid pattern: " + pattern);
+                RealisticStorage.LOGGER.warn("Invalid pattern: " + pattern);
             }
         }
     }
