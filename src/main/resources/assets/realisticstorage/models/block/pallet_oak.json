@@ -1,6 +1,0 @@
-{
-  "parent": "realisticstorage:block/pallet",
-  "textures": {
-    "base": "blocks/planks_oak"
-  }
-}

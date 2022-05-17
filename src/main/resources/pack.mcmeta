@@ -1,7 +1,6 @@
 {
     "pack": {
-        "description": "RealisticStorage resources",
-        "pack_format": 3,
-        "_comment": ""
+        "description": "realisticstorage resources",
+        "pack_format": 8
     }
 }

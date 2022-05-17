@@ -1,0 +1,31 @@
+modLoader="javafml" #mandatory
+loaderVersion="[39,)"
+license="MIT License"
+issueTrackerURL="https://github.com/Oethever/RealisticStorage/issues"
+
+[[mods]]
+modId="realisticstorage"
+version="${file.jarVersion}"
+displayName="Realistic Storage" #mandatory
+# A URL to query for updates for this mod. See the JSON update specification https://mcforge.readthedocs.io/en/latest/gettingstarted/autoupdate/
+#updateJSONURL="https://change.me.example.invalid/updates.json" #optional
+displayURL="https://www.curseforge.com/minecraft/mc-mods/realistic-storage"
+logoFile="icon.png"
+#credits="Thanks for this example mod goes to Java"
+authors="Oethever"
+description='''
+Realistic storage with regard to volume.
+'''
+
+[[dependencies.realisticstorage]]
+    modId="forge"
+    mandatory=true
+    versionRange="[39,)"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.realisticstorage]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.18.1,1.19)"
+    ordering="NONE"
+    side="BOTH"
