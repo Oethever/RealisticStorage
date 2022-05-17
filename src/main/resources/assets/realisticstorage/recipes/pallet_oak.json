@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "PPP",
+    "SSS",
+    "PPP"  ],
+  "key": {
+    "P": [
+      {
+        "item": "minecraft:planks",
+        "data": 0
+      }
+    ],
+    "S": [
+      {
+        "item": "minecraft:wooden_slab",
+        "data": 0
+      }
+    ]
+  },
+  "result": {
+    "item": "realisticstorage:pallet_oak",
+    "count": 4
+  },
+  "group": "pallet"
+}
