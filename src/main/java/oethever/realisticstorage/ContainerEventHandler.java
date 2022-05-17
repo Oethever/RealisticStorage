@@ -10,10 +10,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.entity.player.PlayerContainerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -26,8 +24,7 @@ import java.util.regex.PatternSyntaxException;
 
 @Mod.EventBusSubscriber(
         modid = RealisticStorage.MOD_ID,
-        bus = Mod.EventBusSubscriber.Bus.FORGE,
-        value = Dist.CLIENT
+        bus = Mod.EventBusSubscriber.Bus.FORGE
 )
 public class ContainerEventHandler {
     private static final ArrayList<Pattern> alwaysEjected = new ArrayList<>();
@@ -35,8 +32,6 @@ public class ContainerEventHandler {
 
     @SubscribeEvent
     public static void onInventoryClose(PlayerContainerEvent.Close event) {
-        // TODO update config only on config reload event
-        updateConfig();
         Player player = event.getPlayer();
         BlockPos blockPos = getTargetedBlock(event.getEntity());
         NonNullList<Slot> slotsToCheck = event.getContainer().slots;

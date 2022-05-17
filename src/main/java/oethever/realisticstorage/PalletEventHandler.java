@@ -16,8 +16,7 @@ import oethever.realisticstorage.block.Util;
 
 @Mod.EventBusSubscriber(
         modid = RealisticStorage.MOD_ID,
-        bus = Mod.EventBusSubscriber.Bus.FORGE,
-        value = Dist.CLIENT
+        bus = Mod.EventBusSubscriber.Bus.FORGE
 )
 public class PalletEventHandler {
     private static final int AREA_HEIGHT = 8;
