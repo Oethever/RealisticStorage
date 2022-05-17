@@ -37,7 +37,7 @@ import java.util.regex.PatternSyntaxException;
 public class RealisticStorage {
     public static final String MODID = "realisticstorage";
     public static final String NAME = "Realistic Storage";
-    public static final String VERSION = "0.1";
+    public static final String VERSION = "1.0";
 
     @Mod.Instance(MODID)
     public static RealisticStorage INSTANCE;
@@ -142,12 +142,13 @@ public class RealisticStorage {
         if (itemRegistryName == null)
             return false;
         String itemName = itemRegistryName.toString();
+        String itemNameWithMeta = itemRegistryName.toString() + ":" + stack.getMetadata();
         for (Pattern pattern : alwaysEjectedPatterns) {
-            if (pattern.matcher(itemName).matches())
+            if (pattern.matcher(itemName).matches() || pattern.matcher(itemNameWithMeta).matches())
                 return true;
         }
         for (Pattern pattern : neverEjectedPatterns) {
-            if (pattern.matcher(itemName).matches())
+            if (pattern.matcher(itemName).matches() || pattern.matcher(itemNameWithMeta).matches())
                 return false;
         }
         return stack.getItem() instanceof ItemBlock;
