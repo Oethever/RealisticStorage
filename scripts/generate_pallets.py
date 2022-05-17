@@ -2,8 +2,8 @@ from os import listdir
 from os.path import join
 import re
 
-source_material = "oak"
-target_materials = ["jungle", "acacia", "spruce", "dark_oak", "warped", "birch", "crimson"]
+source_material = "spruce"
+target_materials = ["jungle", "acacia", "oak", "dark_oak", "warped", "birch", "crimson"]
 
 assets_path = "src/main/resources/assets/realisticstorage/"
 data_path = "src/main/resources/data/realisticstorage/"
@@ -11,7 +11,8 @@ folders_to_scan = [
     join(assets_path, "blockstates/"),
     join(assets_path, "models/block/"),
     join(assets_path, "models/item/"),
-    join(data_path, "recipes/")
+    join(data_path, "recipes/"),
+    join(data_path, "loot_tables/blocks/")
 ]
 
 for folder in folders_to_scan:
