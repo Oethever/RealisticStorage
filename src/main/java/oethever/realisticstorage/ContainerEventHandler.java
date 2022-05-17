@@ -1,6 +1,5 @@
 package oethever.realisticstorage;
 
-import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.TextComponent;
@@ -18,6 +17,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.entity.player.PlayerContainerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import oethever.realisticstorage.block.Util;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -57,7 +57,7 @@ public class ContainerEventHandler {
             }
         }
         if (yeet && Config.CONFIG.getSendMessage()) {
-            player.sendMessage(new TextComponent("These items are too big for this container!"), Util.NIL_UUID);
+            player.sendMessage(new TextComponent("These items are too big for this container!"), net.minecraft.Util.NIL_UUID);
         }
         if (Config.CONFIG.getDebugLog()) {
             for (String containerName : containerNames) {
@@ -97,14 +97,10 @@ public class ContainerEventHandler {
     }
 
     private static void yeetSlot(Player player, BlockPos blockPos, Slot yeetslot) {
-        // Spawn the entity with the constructed Entityitem.
-        ItemStack stack = yeetslot.getItem().copy();
+        ItemEntity entity = Util.spawnItem(player.level, yeetslot.getItem().copy(), blockPos.above());
+        entity.setPickUpDelay(30);
         yeetslot.getItem().setCount(0);
         yeetslot.setChanged();
-        ItemEntity itemEntity = player.spawnAtLocation(stack);
-        itemEntity.teleportTo(blockPos.getX() + 0.5, blockPos.getY() + 1.5, blockPos.getZ() + 0.5);
-        // Set a delay so the player doesn't instantly collect it if they are in the way
-        itemEntity.setPickUpDelay(30);
     }
 
     public static void updateConfig() {

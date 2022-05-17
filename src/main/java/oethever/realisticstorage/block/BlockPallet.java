@@ -20,40 +20,8 @@ public class BlockPallet extends Block {
     private static final Properties PROPERTIES = Properties
             .of(Material.WOOD)
             .strength(2.0F, 3.0F)
-            .sound(SoundType.WOOD);
-    private static final VoxelShape SHAPE = Shapes.or(
-            Block.box( 1,  0,  0,  4,  3, 16),
-            Block.box(12,  0,  0, 15,  3, 16),
-            Block.box( 0,  3,  0, 16,  4,  4),
-            Block.box( 0,  3,  6, 16,  4, 10),
-            Block.box( 0,  3, 12, 16,  4, 16),
-
-            Block.box( 1,  4,  0,  4,  7, 16),
-            Block.box(12,  4,  0, 15,  7, 16),
-            Block.box( 0,  7,  0, 16,  8,  4),
-            Block.box( 0,  7,  6, 16,  8, 10),
-            Block.box( 0,  7, 12, 16,  8, 16),
-
-            Block.box( 1,  8,  0,  4, 11, 16),
-            Block.box(12,  8,  0, 15, 11, 16),
-            Block.box( 0, 11,  0, 16, 12,  4),
-            Block.box( 0, 11,  6, 16, 12, 10),
-            Block.box( 0, 11, 12, 16, 12, 16),
-
-            Block.box( 1, 12,  0,  4, 15, 16),
-            Block.box(12, 12,  0, 15, 15, 16),
-            Block.box( 0, 15,  0, 16, 16,  4),
-            Block.box( 0, 15,  6, 16, 16, 10),
-            Block.box( 0, 15, 12, 16, 16, 16)
-    );
-
-    // Invert X and Z of every voxel to obtain the flipped shape
-    private static final VoxelShape FLIPPED_SHAPE = SHAPE.toAabbs().stream().map(
-        aabb -> Shapes.create(new AABB(
-                aabb.minZ, aabb.minY, aabb.minX,
-                aabb.maxZ, aabb.maxY, aabb.maxX
-        ))
-    ).reduce(Shapes::or).get();
+            .sound(SoundType.WOOD)
+            .noOcclusion();
 
     public BlockPallet() {
         super(PROPERTIES);
@@ -67,17 +35,5 @@ public class BlockPallet extends Block {
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(FACING);
-    }
-
-    @SuppressWarnings("deprecation")
-    @Override
-    public VoxelShape getShape(BlockState state, BlockGetter getter, BlockPos pos, CollisionContext context) {
-        switch (state.getValue(FACING)) {
-            case NORTH:
-            case SOUTH:
-                return SHAPE;
-            default:
-                return FLIPPED_SHAPE;
-        }
     }
 }
