@@ -11,6 +11,7 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import oethever.realisticstorage.ModConfig;
 import oethever.realisticstorage.RealisticStorage;
 
 import java.util.ArrayList;
@@ -30,25 +31,30 @@ public class ModBlocks {
 
     @SubscribeEvent
     public static void registerBlocks(RegistryEvent.Register<Block> event) {
-        for (Block blockPallet : blockPallets) {
-            event.getRegistry().register(blockPallet);
+        if (ModConfig.addPallet) {
+            for (Block blockPallet : blockPallets) {
+                event.getRegistry().register(blockPallet);
+            }
+            GameRegistry.registerTileEntity(TileEntityPallet.class,
+                    new ResourceLocation("realisticstorage", "pallet"));
         }
-        GameRegistry.registerTileEntity(TileEntityPallet.class,
-                new ResourceLocation("realisticstorage","pallet"));
     }
 
     @SubscribeEvent
     public static void registerItemBlocks(RegistryEvent.Register<Item> event) {
-        for (Block blockPallet : blockPallets) {
-            event.getRegistry().registerAll(new ItemBlock(blockPallet).setRegistryName(blockPallet.getRegistryName()));
+        if (ModConfig.addPallet) {
+            for (Block blockPallet : blockPallets) {
+                event.getRegistry().registerAll(new ItemBlock(blockPallet).setRegistryName(blockPallet.getRegistryName()));
+            }
         }
-
     }
 
     @SubscribeEvent
     public static void registerRenders(ModelRegistryEvent event) {
-        for (Block blockPallet : blockPallets) {
-            registerRender(Item.getItemFromBlock(blockPallet));
+        if (ModConfig.addPallet) {
+            for (Block blockPallet : blockPallets) {
+                registerRender(Item.getItemFromBlock(blockPallet));
+            }
         }
     }
 

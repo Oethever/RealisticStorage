@@ -18,6 +18,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerContainerEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import oethever.realisticstorage.ModConfig;
+import oethever.realisticstorage.Utils;
 import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
@@ -50,7 +51,7 @@ public class ContainerGuard {
         // Checks what mode the size list is in.
         if (Arrays.asList(ModConfig.checkedContainers).contains(containerName)) {
             // ray-trace to get the block the user is looking at.
-            BlockPos tracedPos = getTracedPos(rayTrace(player, player.getEntityAttribute(EntityPlayer.REACH_DISTANCE).getAttributeValue()));
+            BlockPos tracedPos = Utils.getTargetedBlock(player);
             // Check the size.
             doSizeCheck(player, world, tracedPos, slotsToCheck);
         }
@@ -70,22 +71,6 @@ public class ContainerGuard {
                 logger.warn("Invalid pattern: " + pattern);
             }
         }
-    }
-
-    private static RayTraceResult rayTrace(Entity entity, double blockReachDistance) {
-        Vec3d eyePosition = entity.getPositionEyes(1);
-        Vec3d lookVector = entity.getLook(1);
-        Vec3d rayTraceVector = eyePosition.addVector(lookVector.x * blockReachDistance, lookVector.y * blockReachDistance, lookVector.z * blockReachDistance);
-        return entity.world.rayTraceBlocks(eyePosition, rayTraceVector, false, false, true);
-    }
-
-    private static BlockPos getTracedPos(RayTraceResult rayTrace) {
-        // if the ray-trace isn't null & we have a block to "eject" from
-        if (rayTrace != null && rayTrace.typeOfHit != RayTraceResult.Type.MISS) {
-            // block pos of our traced target.
-            return rayTrace.getBlockPos();
-        }
-        return null;
     }
 
     private void doSizeCheck(EntityPlayer player, World world, BlockPos tracedPos, ArrayList<Slot> slotsToEffect) {

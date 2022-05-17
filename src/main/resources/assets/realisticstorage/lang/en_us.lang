@@ -7,6 +7,7 @@ realisticstorage.config.message.send=Notify Player
 realisticstorage.config.message.text=Eject Message Text
 realisticstorage.config.message.location=Eject Message Location
 realisticstorage.config.debug=Debug Log
+realisticstorage.config.addpalet=Add Pallet Block
 
 tile.pallet_oak.name=Oak Pallet
 tile.pallet_dark_oak.name=Dark Oak Pallet
