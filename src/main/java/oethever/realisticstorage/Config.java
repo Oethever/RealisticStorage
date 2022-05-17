@@ -13,7 +13,7 @@ public class Config {
     public static final ForgeConfigSpec CONFIG_SPEC;
     public static final Config CONFIG;
     private final ForgeConfigSpec.BooleanValue sendMessage;
-    private final ForgeConfigSpec.BooleanValue debugLog;
+    private final ForgeConfigSpec.BooleanValue printContainerNames;
     private final ForgeConfigSpec.ConfigValue<List<? extends String>> checkedContainers;
     private final ForgeConfigSpec.ConfigValue<List<? extends String>> alwaysEjected;
     private final ForgeConfigSpec.ConfigValue<List<? extends String>> neverEjected;
@@ -28,11 +28,11 @@ public class Config {
         sendMessage = builder
                 .comment("True if players should be notified when blocks are ejected.")
                 .define("send_message", true);
-        debugLog = builder
-                .comment("Enable/Disable the debug logging of slots and container names.")
-                .define("debug_log", false);
+        printContainerNames = builder
+                .comment("Enable/Disable printing the name of containers in the chat.")
+                .define("print_container_names", false);
         checkedContainers = builder.
-                comment("Short class names of inventories that are checked for oversize items. Turn on debug log to get these names.")
+                comment("Names of inventories that are checked for oversize items. Set print_container_names to true to get these names.")
                 .defineList("checked_container", Arrays.asList(
                     "ChestBlockEntity",
                     "TrappedChestBlockEntity",
@@ -43,7 +43,7 @@ public class Config {
                     "DropperBlockEntity"
                 ), o -> true);
         alwaysEjected = builder.
-                comment("Items that are always ejected. F3+H to get names.")
+                comment("Items that are always ejected. Press F3+H to see these names in game.")
                 .defineList("always_ejected", Arrays.asList(
                     "minecraft:armor_stand",
                     ".*_bed",
@@ -57,7 +57,7 @@ public class Config {
                     ".*_head"
                 ), o -> true);
         neverEjected = builder.
-                comment("Items that are never ejected. F3+H to get names.")
+                comment("Items that are never ejected. Press F3+H to see these names in game.")
                 .defineList("never_ejected", Arrays.asList(
                     // Plants
                     ".*_sapling",
@@ -143,8 +143,8 @@ public class Config {
         return sendMessage.get();
     }
 
-    public boolean getDebugLog() {
-        return debugLog.get();
+    public boolean getPrintContainerNames() {
+        return printContainerNames.get();
     }
 
     public List<String> getCheckedContainers() {

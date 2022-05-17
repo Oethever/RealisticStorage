@@ -1,4 +1,4 @@
-package oethever.realisticstorage;
+package oethever.realisticstorage.handlers;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
@@ -15,6 +15,8 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.event.entity.player.PlayerContainerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import oethever.realisticstorage.Config;
+import oethever.realisticstorage.RealisticStorage;
 import oethever.realisticstorage.block.Util;
 import org.jetbrains.annotations.NotNull;
 
@@ -29,6 +31,12 @@ import java.util.regex.PatternSyntaxException;
 public class ContainerEventHandler {
     private static final ArrayList<Pattern> alwaysEjected = new ArrayList<>();
     private static final ArrayList<Pattern> neverEjected = new ArrayList<>();
+
+    private static final List<String> containersNotPrinted = Arrays.asList(
+            "Inventory",
+            "CraftingContainer",
+            "ResultContainer"
+    );
 
     @SubscribeEvent
     public static void onInventoryClose(PlayerContainerEvent.Close event) {
@@ -52,11 +60,13 @@ public class ContainerEventHandler {
             }
         }
         if (yeet && Config.CONFIG.getSendMessage()) {
-            player.sendMessage(new TextComponent("These items are too big for this container!"), net.minecraft.Util.NIL_UUID);
+            player.displayClientMessage(new TextComponent("These items are too big for this container!"), true);
         }
-        if (Config.CONFIG.getDebugLog()) {
+        if (Config.CONFIG.getPrintContainerNames()) {
             for (String containerName : containerNames) {
-                RealisticStorage.LOGGER.info("Slot container name: " + containerName);
+                if (!containersNotPrinted.contains(containerName)) {
+                    player.displayClientMessage(new TextComponent("Slot container name: " + containerName), false);
+                }
             }
         }
     }

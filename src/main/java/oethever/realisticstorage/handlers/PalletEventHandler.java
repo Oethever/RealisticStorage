@@ -1,4 +1,4 @@
-package oethever.realisticstorage;
+package oethever.realisticstorage.handlers;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
@@ -11,6 +11,7 @@ import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import oethever.realisticstorage.RealisticStorage;
 import oethever.realisticstorage.block.BlockPallet;
 import oethever.realisticstorage.block.Util;
 
