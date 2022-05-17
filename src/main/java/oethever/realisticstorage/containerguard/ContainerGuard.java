@@ -142,7 +142,7 @@ public class ContainerGuard {
         if (tracedPos == null || world.getTileEntity(tracedPos) == null)
             tracedPos = player.getPosition();
 
-        spawnYeetItem(world, tracedPos, yeetslot.getStack());
+        spawnYeetItem(world, tracedPos, yeetslot.getStack().copy());
         yeetslot.getStack().setCount(0);
         yeetslot.inventory.markDirty();
     }
@@ -152,7 +152,7 @@ public class ContainerGuard {
         float f1 = world.rand.nextFloat() * 0.8F + 0.1F;
         float f2 = world.rand.nextFloat() * 0.8F + 0.1F;
         // the item to be spawned and thrown
-        EntityItem entityitem = new EntityItem(world, pos.getX() + (double) f, pos.getY() + (double) f1, pos.getZ() + (double) f2, item.splitStack(world.rand.nextInt(21) + 10));
+        EntityItem entityitem = new EntityItem(world, pos.getX() + (double) f, pos.getY() + (double) f1, pos.getZ() + (double) f2, item);
         //set a delay so the player doesn't instantly collect it if they are in the way
         entityitem.setPickupDelay(30);
         //Set the motion on the item
