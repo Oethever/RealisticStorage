@@ -14,7 +14,7 @@ import static oethever.realisticstorage.RealisticStorage.INSTANCE;
 @Config.LangKey("realisticstorage.config.title")
 public class ModConfig {
     @Config.LangKey("realisticstorage.config.checked.containers")
-    @Config.Comment("Full Class path names of inventories that are checked for oversize items. Turn on debug to get these names.")
+    @Config.Comment("Full Class path names of inventories that are checked for oversize items. Turn on debug log to get these names.")
     public static String[] checkedContainers = {
             "net.minecraft.inventory.ContainerChest",
             "blusunrize.immersiveengineering.common.gui.ContainerToolbox",
@@ -25,7 +25,7 @@ public class ModConfig {
     };
 
     @Config.LangKey("realisticstorage.config.ignored.slots")
-    @Config.Comment("Class name of slots that are never checked. Turn on debug to get these names. Do not enter InventoryBasic slots here!")
+    @Config.Comment("Class name of slots that are never checked. Turn on debug log to get these names. Do not enter InventoryBasic slots here!")
     public static String[] ignoredSlots = {
             "net.minecraft.entity.player.InventoryPlayer",
             "net.minecraft.inventory.InventoryCrafting",
@@ -40,37 +40,48 @@ public class ModConfig {
             "minecraft:bed",
             "minecraft:brewing_stand",
             "minecraft:cauldron",
-            ".*_boat",
+            ".*boat",
             ".*_door",
-            ".*_minecart"
+            ".*minecart",
+            ".*skull",
     };
 
     @Config.LangKey("realisticstorage.config.items.never")
     @Config.Comment("Items that are never ejected. F3+H to get names.")
     public static String[] neverEjectedItems = {
+            // Plants
+            ".*_mushroom.*",
+            ".*_flower",
+            ".*sapling",
+            ".*grass",
+            "minecraft:waterlily",
+            "minecraft:deadbush",
+            "minecraft:grass",
+            "minecraft:vine",
+            ".*_plant",
+
+            // Furniture
+            "minecraft:barrier",
+            "minecraft:iron_bars",
+            "minecraft:ladder",
+            "minecraft:sign",
+            "minecraft:painting",
+            "minecraft:tripwire_hook",
+            "minecraft:lever",
             ".*_fence",
             ".*_fence_gate",
             ".*_carpet.*",
-            ".*_mushroom.*",
-            ".*glass.*",
-            ".*_pressure_plate",
-            ".*_trapdoor",
-            ".*_flower",
+            ".*trapdoor",
             ".*_torch",
-            ".*_sapling",
             ".*_button",
-            ".*grass",
-            "minecraft:deadbush",
-            "minecraft:barrier",
-            "minecraft:bookshelf",
-            "minecraft:glowstone",
-            "minecraft:grass",
-            "minecraft:iron_bars",
-            "minecraft:ladder",
-            "minecraft:lever",
-            "minecraft:melon_block",
-            "minecraft:vine",
+            ".*_pressure_plate",
+
+            // Breakable blocks
             "minecraft:web",
+            ".*glass.*",
+            "minecraft:glowstone",
+            "minecraft:bookshelf",
+            "minecraft:melon_block",
 
             // Better with Mods
             ".*_siding",

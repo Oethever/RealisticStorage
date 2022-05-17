@@ -6,4 +6,4 @@ realisticstorage.config.items.never=Never Ejected Items
 realisticstorage.config.message.send=Notify Player
 realisticstorage.config.message.text=Eject Message Text
 realisticstorage.config.message.location=Eject Message Location
-realisticstorage.config.debug.slot=Debug Log
+realisticstorage.config.debug=Debug Log
