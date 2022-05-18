@@ -29,12 +29,12 @@ public class SlotEventHandler {
         if (player.level.isClientSide() || player.isCreative() || player.isDeadOrDying()) {
             return;
         }
-        if (event.getItem().getItem().isEmpty()) {
+        ItemStack stack = event.getItem().getItem();
+        if (stack.isEmpty()) {
             return;
         }
-        Inventory inventory = player.getInventory();
-        int emptySlot = getFirstEmptySlot(inventory);
-        if (emptySlot == -1) {
+        int remaining = tryToFill(player.getInventory(), stack, false);
+        if (remaining > 0) {
             event.setCanceled(true);
             event.setResult(Event.Result.DENY);
         }
@@ -52,34 +52,48 @@ public class SlotEventHandler {
         if (player.level.isClientSide() || player.isCreative() || player.isDeadOrDying()) {
             return;
         }
+
         Inventory inventory = player.getInventory();
         for (int i = Config.CONFIG.getSlotLimit(); i < Math.min(MAX_SLOTS, inventory.getContainerSize()); ++i) {
             ItemStack stack = inventory.getItem(i);
             if (stack.isEmpty()) {
                 continue;
             }
-            int emptySlot = getFirstEmptySlot(inventory);
-            if (emptySlot == -1) {
+            tryToFill(inventory, stack, true);
+            if (!stack.isEmpty()) {
                 player.drop(stack, false);
-            } else {
-                inventory.setItem(emptySlot, stack);
-            }
-            inventory.setItem(i, ItemStack.EMPTY);
-        }
-    }
-
-    private static int getFirstEmptySlot(Inventory inventory) {
-        for (int i = 0; i < Math.min(Config.CONFIG.getSlotLimit(), inventory.getContainerSize()); ++i) {
-            ItemStack stack = inventory.getItem(i);
-            if (stack.isEmpty()) {
-                return i;
+                inventory.setItem(i, ItemStack.EMPTY);
             }
         }
-        return -1;
     }
 
     public static boolean isLockedSlot(int slotIndex) {
         int slotLimit = Config.CONFIG.getSlotLimit();
         return slotLimit > -1 && slotIndex >= slotLimit && slotIndex < MAX_SLOTS;
+    }
+    
+    private static int tryToFill(Inventory inventory, ItemStack stack, boolean commit) {
+        int remaining = stack.getCount();
+        for (int i = 0; i < Config.CONFIG.getSlotLimit(); ++i) {
+            ItemStack otherStack = inventory.getItem(i);
+            if (otherStack.isEmpty()) {
+                if (commit) {
+                    inventory.setItem(i, stack.copy());
+                    stack.setCount(0);
+                }
+                return 0;
+            } else if (otherStack.sameItem(stack)) {
+                int count = Math.min(stack.getCount(), otherStack.getMaxStackSize() - otherStack.getCount());
+                if (commit) {
+                    otherStack.grow(count);
+                    stack.shrink(count);
+                }
+                remaining -= count;
+            }
+            if (remaining <= 0) {
+                return 0;
+            }
+        }
+        return remaining;
     }
 }

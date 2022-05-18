@@ -14,6 +14,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ContainerScreenEvent;
 import net.minecraftforge.client.gui.ForgeIngameGui;
 import net.minecraftforge.client.gui.OverlayRegistry;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import oethever.realisticstorage.Config;
@@ -31,6 +32,7 @@ public class DrawEventHandler {
     private static final int SLOT_SIZE = 16;
     private static final int SLOTS_PER_ROW = 9;
     public static void init() {
+
         OverlayRegistry.registerOverlayAbove(
                 ForgeIngameGui.HOTBAR_ELEMENT,
                 "Realistic Storage Locked Slots",
