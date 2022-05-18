@@ -10,6 +10,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.event.entity.player.PlayerContainerEvent;
@@ -102,10 +103,9 @@ public class ContainerEventHandler {
     }
 
     private static void yeetSlot(Player player, BlockPos blockPos, Slot yeetslot) {
-        ItemEntity entity = Util.spawnItem(player.level, yeetslot.getItem().copy(), blockPos.above());
+        ItemEntity entity = Util.spawnItem(player.level, yeetslot.getItem(), blockPos.above());
         entity.setPickUpDelay(30);
-        yeetslot.getItem().setCount(0);
-        yeetslot.setChanged();
+        yeetslot.set(ItemStack.EMPTY);
     }
 
     public static void updateConfig() {

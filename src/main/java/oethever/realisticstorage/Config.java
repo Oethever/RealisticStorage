@@ -3,6 +3,7 @@ package oethever.realisticstorage;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.config.ModConfig;
+import oethever.realisticstorage.handlers.SlotEventHandler;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.Arrays;
@@ -12,6 +13,7 @@ import java.util.List;
 public class Config {
     public static final ForgeConfigSpec CONFIG_SPEC;
     public static final Config CONFIG;
+    private final ForgeConfigSpec.IntValue slotLimit;
     private final ForgeConfigSpec.BooleanValue sendMessage;
     private final ForgeConfigSpec.BooleanValue printContainerNames;
     private final ForgeConfigSpec.ConfigValue<List<? extends String>> checkedContainers;
@@ -25,6 +27,9 @@ public class Config {
     }
 
     Config(ForgeConfigSpec.Builder builder) {
+        slotLimit = builder
+                .comment("Number of player inventory slots. Set to -1 to disable this feature.")
+                .defineInRange("slot_limit", -1, -1, SlotEventHandler.MAX_SLOTS);
         sendMessage = builder
                 .comment("True if players should be notified when blocks are ejected.")
                 .define("send_message", true);
@@ -137,6 +142,10 @@ public class Config {
 
     public static void init() {
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CONFIG_SPEC);
+    }
+
+    public int getSlotLimit() {
+        return slotLimit.get();
     }
 
     public boolean getSendMessage() {
