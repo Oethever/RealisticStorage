@@ -9,7 +9,9 @@ All large blocks (such as dirt, cobble, stairs, etc) are not permitted anymore i
 
 
 ### Pallet block
-New block: the Pallet (comes in all Wood variants). All blocks placed on the pallet (up to 8 blocks above it) can be broken instantly without any tool. Time to build some warehouses! You can right-click the pallet to stack blocks without having to tower-jump.
+New block: the Pallet (comes in all Wood variants). All blocks placed on the pallet (up to 8 blocks above it) come back to your inventory instantly when left-clicked. Right-click on a pallet will automatically stack blocks above the pallet (up to the limit of 8). Adjacent pallets will share the blocks added with right-click, so that a group of pallets acts like a large container. Time to build some warehouses!
+
+Note: block placed _before_ the pallet will still have to be mined normally. This prevents insta-mining and free feather touch. This also allow you to put a roof above the pallet without risk of destroying it by mistake.
 
 ![The Pallet](screenshots/pallet.png)
 
