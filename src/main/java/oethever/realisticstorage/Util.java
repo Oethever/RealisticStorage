@@ -1,4 +1,4 @@
-package oethever.realisticstorage.block;
+package oethever.realisticstorage;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.item.ItemEntity;

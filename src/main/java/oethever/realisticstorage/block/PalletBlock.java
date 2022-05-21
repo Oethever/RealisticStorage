@@ -1,15 +1,20 @@
 package oethever.realisticstorage.block;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.material.Material;
+import oethever.realisticstorage.Registry;
 
-public class BlockPallet extends Block {
+
+public class PalletBlock extends Block implements EntityBlock {
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     private static final Properties PROPERTIES = Properties
             .of(Material.WOOD)
@@ -17,7 +22,7 @@ public class BlockPallet extends Block {
             .sound(SoundType.WOOD)
             .noOcclusion();
 
-    public BlockPallet() {
+    public PalletBlock() {
         super(PROPERTIES);
     }
 
@@ -29,5 +34,10 @@ public class BlockPallet extends Block {
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(FACING);
+    }
+
+    @Override
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return Registry.PALLET_BLOCK_ENTITY.get().create(pos, state);
     }
 }

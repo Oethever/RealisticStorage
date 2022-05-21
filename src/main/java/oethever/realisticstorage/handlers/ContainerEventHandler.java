@@ -18,7 +18,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import oethever.realisticstorage.Config;
 import oethever.realisticstorage.RealisticStorage;
-import oethever.realisticstorage.block.Util;
+import oethever.realisticstorage.Util;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
