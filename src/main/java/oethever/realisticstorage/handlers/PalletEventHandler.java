@@ -13,7 +13,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import oethever.realisticstorage.RealisticStorage;
 import oethever.realisticstorage.Registry;
-import oethever.realisticstorage.block.PalletBlock;
 import oethever.realisticstorage.Util;
 import oethever.realisticstorage.blockentity.PalletBlockEntity;
 
@@ -24,7 +23,7 @@ import java.util.Optional;
         bus = Mod.EventBusSubscriber.Bus.FORGE
 )
 public class PalletEventHandler {
-    @SubscribeEvent(priority = EventPriority.LOWEST)
+    @SubscribeEvent(priority = EventPriority.HIGH)
     public static void onLeftClick(PlayerInteractEvent.LeftClickBlock event) {
         Level world = event.getEntity().level;
         if (world.isClientSide()) {
@@ -36,7 +35,7 @@ public class PalletEventHandler {
             event.setUseBlock(Event.Result.DENY);
             event.setUseItem(Event.Result.DENY);
             event.setCanceled(true);
-            Util.spawnItem(world, getSilkTouchDrop(world.getBlockState(pos)), pos);
+            Util.tryToFillInventory(event.getPlayer().getInventory(), getSilkTouchDrop(world.getBlockState(pos)), true);
             world.removeBlock(pos, false);
         }
     }

@@ -1,14 +1,11 @@
 package oethever.realisticstorage.blockentity;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import oethever.realisticstorage.Registry;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 
 public class PalletBlockEntity extends BlockEntity {

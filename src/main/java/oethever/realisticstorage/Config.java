@@ -1,9 +1,9 @@
 package oethever.realisticstorage;
 
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.config.ModConfig;
-import oethever.realisticstorage.handlers.SlotEventHandler;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.Arrays;
@@ -29,7 +29,7 @@ public class Config {
     Config(ForgeConfigSpec.Builder builder) {
         slotLimit = builder
                 .comment("Number of player inventory slots. Set to -1 to disable this feature.")
-                .defineInRange("slot_limit", -1, -1, SlotEventHandler.MAX_SLOTS);
+                .defineInRange("slot_limit", -1, -1, Inventory.INVENTORY_SIZE);
         sendMessage = builder
                 .comment("True if players should be notified when blocks are ejected.")
                 .define("send_message", true);
