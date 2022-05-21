@@ -32,6 +32,12 @@ import java.util.Optional;
         bus = Mod.EventBusSubscriber.Bus.FORGE
 )
 public class PalletEventHandler {
+
+    /**
+     * Called when a block is broken, responsible for putting the block in the player inventory if it is above
+     * a pallet.
+     * @param event The FML event.
+     */
     @SubscribeEvent
     public static void onBlockBreak(BlockEvent.BreakEvent event) {
         Level world = event.getPlayer().level;
@@ -53,6 +59,11 @@ public class PalletEventHandler {
         }
     }
 
+    /**
+     * Called during the block breaking every tick, if the block is above a pallet we accelerate the mining so that
+     * every block is mined instantly.
+     * @param event The FML event.
+     */
     @SubscribeEvent
     public static void onBreakSpeed(PlayerEvent.BreakSpeed event) {
         Level world = event.getPlayer().level;
@@ -67,6 +78,11 @@ public class PalletEventHandler {
         }
     }
 
+    /**
+     * Called when a blocked is placed in the world, we need to update the list of blocks being placed after a pallet
+     * to make sure that blocks placed before have to be mined normally, and those placed after are insta-mined.
+     * @param event The FML event.
+     */
     @SubscribeEvent
     public static void onBlockPlace(BlockEvent.EntityPlaceEvent event) {
         Entity entity = event.getEntity();
@@ -84,6 +100,11 @@ public class PalletEventHandler {
         }
     }
 
+    /**
+     * Called when a block is right-clicked, we cancel the event if the block is a pallet. This is done on both client
+     * and server, to avoid having a ghost block pop up and disappear on the client side.
+     * @param event The FML event.
+     */
     @SubscribeEvent
     public static void onRightClickBlock(PlayerInteractEvent.RightClickBlock event) {
         Level world = event.getEntity().level;
@@ -95,6 +116,17 @@ public class PalletEventHandler {
         }
     }
 
+    /**
+     * This function is called by PalletBlock.use, and we attempt to place a block above the pallet when the pallet
+     * block is right-clicked. This code is here instead of in PalletBlock in order to keep all pallet logic in the
+     * same file.
+     * @param state The block state of the pallet
+     * @param world The world
+     * @param pos The pos of the pallet
+     * @param player The player
+     * @param hand The hand used by the player
+     * @return true if a block was placed above the pallet, false otherwise.
+     */
     public static boolean tryAddBlock(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand) {
         if (!world.isClientSide()) {
             ItemStack handStack = player.getItemInHand(hand);
