@@ -35,9 +35,7 @@ public class DrawEventHandler {
         OverlayRegistry.registerOverlayAbove(
                 ForgeIngameGui.HOTBAR_ELEMENT,
                 "Realistic Storage Locked Slots",
-                (gui, poseStack, partialTicks, screenWidth, screenHeight) -> {
-                    drawLockedSlots(poseStack);
-                }
+                (gui, poseStack, partialTicks, screenWidth, screenHeight) -> drawLockedSlots(poseStack)
         );
 
     }

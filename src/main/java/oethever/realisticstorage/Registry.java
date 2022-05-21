@@ -43,7 +43,7 @@ public class Registry {
         "pallet",
         () -> BlockEntityType.Builder.of(
             PalletBlockEntity::new,
-            BLOCK_PALLETS.stream().map(block -> block.get()).toArray(PalletBlock[]::new)
+            BLOCK_PALLETS.stream().map(RegistryObject::get).toArray(PalletBlock[]::new)
         ).build(null)
     );
 
