@@ -9,7 +9,7 @@ All large blocks (such as dirt, cobble, stairs, etc) are not permitted anymore i
 
 
 ### Pallet block
-New block: the Pallet (comes in all Wood variants). All blocks placed on the pallet (up to 8 blocks above it) can be broken instantly without any tool. Time to build some warehouses!
+New block: the Pallet (comes in all Wood variants). All blocks placed on the pallet (up to 8 blocks above it) can be broken instantly without any tool. Time to build some warehouses! You can right-click the pallet to stack blocks without having to tower-jump.
 
 ![The Pallet](screenshots/pallet.png)
 

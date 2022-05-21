@@ -1,6 +1,7 @@
 package oethever.realisticstorage.handlers;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
@@ -25,7 +26,7 @@ import oethever.realisticstorage.Util;
 import oethever.realisticstorage.block.PalletBlock;
 import oethever.realisticstorage.blockentity.PalletBlockEntity;
 
-import java.util.Optional;
+import java.util.*;
 
 @Mod.EventBusSubscriber(
         modid = RealisticStorage.MOD_ID,
@@ -45,7 +46,7 @@ public class PalletEventHandler {
             return;
         }
         BlockPos pos = event.getPos();
-        Optional<PalletBlockEntity> pallet = getPalletBelow(world, pos);
+        Optional<PalletBlockEntity> pallet = searchPalletBelow(world, pos);
         if (pallet.isPresent() && pallet.get().wasPlacedBefore(pos)) {
             // Cancel the event and put the block in the player's inventory
             event.setCanceled(true);
@@ -71,7 +72,7 @@ public class PalletEventHandler {
             return;
         }
         BlockPos pos = event.getPos();
-        Optional<PalletBlockEntity> pallet = getPalletBelow(world, pos);
+        Optional<PalletBlockEntity> pallet = searchPalletBelow(world, pos);
         if (pallet.isPresent() && pallet.get().wasPlacedBefore(pos)) {
             // The number has to be really high to work with anvil, obsidian and other hard blocks
             event.setNewSpeed(10000.f);
@@ -94,7 +95,7 @@ public class PalletEventHandler {
             return;
         }
         BlockPos pos = event.getPos();
-        Optional<PalletBlockEntity> pallet = getPalletBelow(world, pos);
+        Optional<PalletBlockEntity> pallet = searchPalletBelow(world, pos);
         if (pallet.isPresent()) {
             pallet.get().setPlaced(pos);
         }
@@ -119,7 +120,7 @@ public class PalletEventHandler {
     /**
      * This function is called by PalletBlock.use, and we attempt to place a block above the pallet when the pallet
      * block is right-clicked. This code is here instead of in PalletBlock in order to keep all pallet logic in the
-     * same file.
+     * same file. Adjacent pallets are also checked, and empty spots are filled layer by layer.
      * @param state The block state of the pallet
      * @param world The world
      * @param pos The pos of the pallet
@@ -129,25 +130,30 @@ public class PalletEventHandler {
      */
     public static boolean tryAddBlock(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand) {
         if (!world.isClientSide()) {
+            // Don't place the main hand block if there is something in the off-hand
+            if (hand == InteractionHand.MAIN_HAND && !player.getOffhandItem().isEmpty()) {
+                return false;
+            }
             ItemStack handStack = player.getItemInHand(hand);
             if (!handStack.isEmpty() && handStack.getItem() instanceof BlockItem) {
                 Block block = ((BlockItem) handStack.getItem()).getBlock();
                 BlockEntity blockEntity = world.getBlockEntity(pos);
                 if (blockEntity instanceof PalletBlockEntity pallet) {
                     // Try to add the block above the pallet
-                    for (int i = 0; i < PalletBlockEntity.AREA_HEIGHT; ++i) {
-                        BlockPos abovePos = pallet.getBlockPos().above(i + 1);
-                        if (world.getBlockState(abovePos).isAir()) {
-                            world.setBlock(abovePos, block.defaultBlockState(), Block.UPDATE_ALL);
-                            pallet.setPlaced(abovePos);
-                            handStack.shrink(1);
-                            player.setItemInHand(hand, handStack);
-
-                            // Play a sound
-                            SoundType sound = block.getSoundType(state, world, pos, player);
-                            world.playSound(null, pos, sound.getPlaceSound(), SoundSource.BLOCKS, 1.0F, 1.0F);
-                            return true;
-                        }
+                    Optional<BlockPos> optPlacedPos = searchEmptyBlock(world, pos);
+                    if (optPlacedPos.isPresent()) {
+                        // Add the block to the world
+                        BlockPos placedPos = optPlacedPos.get();
+                        world.setBlock(placedPos, block.defaultBlockState(), Block.UPDATE_ALL);
+                        handStack.shrink(1);
+                        // Update the pallet below the placed block
+                        BlockPos posOfPalletBelow = new BlockPos(placedPos.getX(), pos.getY(), placedPos.getZ());
+                        PalletBlockEntity palletBelow = (PalletBlockEntity) world.getBlockEntity(posOfPalletBelow);
+                        palletBelow.setPlaced(placedPos);
+                        // Play a sound
+                        SoundType sound = block.getSoundType(state, world, pos, player);
+                        world.playSound(null, pos, sound.getPlaceSound(), SoundSource.BLOCKS, 1.0F, 1.0F);
+                        return true;
                     }
                 }
             }
@@ -155,7 +161,59 @@ public class PalletEventHandler {
         return false;
     }
 
-    private static Optional<PalletBlockEntity> getPalletBelow(LevelAccessor world, BlockPos pos) {
+    /**
+     * Look for an empty block above the pallet at palletPos, or above neighboring blocks that have a pallet on the
+     * same level.
+     * @param world The world.
+     * @param palletPos The pos of the pallet being clicked.
+     * @return The position of an empty block that can be used if there is one, an empty value if the pallet cluster is
+     * full.
+     */
+    private static Optional<BlockPos> searchEmptyBlock(Level world, BlockPos palletPos) {
+        List<BlockPos> palletCluster = findPalletCluster(world, palletPos);
+        for (int i = 0; i < PalletBlockEntity.AREA_HEIGHT; ++i) {
+            for (BlockPos pos : palletCluster) {
+                BlockPos abovePos = pos.above(i + 1);
+                if (world.getBlockState(abovePos).isAir()) {
+                    return Optional.of(abovePos);
+                }
+            }
+        }
+        return Optional.empty();
+    }
+
+    /**
+     * Finds all pallets connected to this one, even indirectly through other pallets, on the same Y-level.
+     * @param world The world.
+     * @param start The position of the first pallet.
+     * @return A list of all connected pallets.
+     */
+    private static List<BlockPos> findPalletCluster(Level world, BlockPos start) {
+        Direction[] directions = new Direction[]{Direction.NORTH, Direction.SOUTH, Direction.WEST, Direction.EAST};
+        List<BlockPos> exploredBlocks = new ArrayList<>();
+        Queue<BlockPos> queue = new ArrayDeque<>();
+        exploredBlocks.add(start);
+        queue.add(start);
+        while (!queue.isEmpty()) {
+            BlockPos pos = queue.remove();
+            for (Direction direction : directions) {
+                BlockPos neighbor = pos.relative(direction);
+                if (world.getBlockEntity(neighbor) instanceof PalletBlockEntity && !exploredBlocks.contains(neighbor)) {
+                    exploredBlocks.add(neighbor);
+                    queue.add(neighbor);
+                }
+            }
+        }
+        return exploredBlocks;
+    }
+
+    /**
+     * Look for a pallet below the given position.
+     * @param world The world.
+     * @param pos The position from which to start the search.
+     * @return An optional value if a pallet was found, an empty value otherwise.
+     */
+    private static Optional<PalletBlockEntity> searchPalletBelow(LevelAccessor world, BlockPos pos) {
         if (pos == null) {
             return Optional.empty();
         }
